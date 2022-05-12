@@ -4,7 +4,7 @@
       <CardComponent class="cursor-pointer"
                      v-for="character in allCharacters" :key="character.id"
                      :character="character"
-                     @click="getEpisodesCharacter(character)"></CardComponent>
+                     @click="getEpisodesByCharacter(character)"></CardComponent>
     </div>
 
 
@@ -37,20 +37,22 @@
         </div>
       </template>
     </ModalComponent>
+
+    <PaginationComponent v-if="pagination.pages > 1"
+                         :pagination="pagination"
+                         @pageChange="pageChange"></PaginationComponent>
   </section>
 </template>
 
 <script>
 import axios from "axios";
-import CardComponent from "../components/CardComponent.vue";
-import ModalComponent from "../components/ModalComponent.vue";
 
 export default {
   name: "HomeView",
-  components: {CardComponent, ModalComponent},
   data() {
     return {
       // datas
+      dataToFetch: '?gender=female&species=human',
       allCharacters: {},
       detailsCharacter: {},
       allCharactersByEpisode: [],
@@ -64,30 +66,30 @@ export default {
     }
   },
   methods: {
+    // FETCH DATA
     getAllCharacters() {
       axios.get("https://rickandmortyapi.com/api/character/?gender=female&species=human")
         .then(({data}) => {
           this.allCharacters = data.results;
-          this.pagination = data.infos;
+          this.pagination = data.info;
+          this.pagination.currentPage = 1;
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           window.alert("Une erreur est survenue... Merci d'essayer à nouveau");
         });
     },
-    getEpisodesCharacter(character) {
+    getEpisodesByCharacter(character) {
       document.querySelector('body').style.overflow = "hidden";
       this.isOpenModal = true;
       this.detailsCharacter = character;
       let episodesId = this.getItemsIdByURL(character.episode);
 
-      axios.get("https://rickandmortyapi.com/api/episode/" + episodesId)
+      axios.get("https://rickandmortyapi.com/api/episode/[" + episodesId + "]")
         .then(({data}) => {
           this.episodesByCharacter = data;
           this.getAllCharactersByEpisodes(data[0])
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           window.alert("Une erreur est survenue... Merci d'essayer à nouveau")
         })
     },
@@ -110,11 +112,28 @@ export default {
           window.alert("Une erreur est survenue... Merci d'essayer à nouveau")
         })
     },
+    // MODAL
     closeModal() {
       document.querySelector('body').style.overflow = "scroll";
       this.detailsCharacter = {};
+      this.episodesByCharacter = {};
       this.allCharactersByEpisode = {};
       this.isOpenModal = false;
+    },
+    // PAGINATION
+    pageChange(value) {
+      console.log(value);
+      axios.get("https://rickandmortyapi.com/api/character/?gender=female&species=human&page=" + value)
+        .then(({data}) => {
+          console.log('daaata',data)
+          this.allCharacters = data.results;
+          this.pagination = data.info;
+          this.pagination.currentPage = 1;
+          this.$emit('reloadDataPageChange', data.results);
+        })
+        .catch(() => {
+          window.alert("Une erreur est survenue... Merci d'essayer à nouveau");
+        })
     }
   },
   created() {
