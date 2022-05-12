@@ -1,0 +1,124 @@
+<template>
+  <section class="container mx-auto mb-auto pt-10">
+    <div class="grid lg:grid-cols-3	 md:grid-cols-2 sm:grid-cols-1 gap-4">
+      <CardComponent class="cursor-pointer"
+                     v-for="character in allCharacters" :key="character.id"
+                     :character="character"
+                     @click="getEpisodesCharacter(character)"></CardComponent>
+    </div>
+
+
+    <ModalComponent v-if="isOpenModal" @closeModal="closeModal">
+      <template v-slot:header>
+        <span class="text-2xl font-bold underline">Les épisodes de : {{ detailsCharacter.name }} <span class="text-lg">({{episodesByCharacter.length + ' apparition' + (episodesByCharacter.length > 1 ? 's' : '')}})</span></span>
+      </template>
+      <template v-slot:body>
+        <div class="grid grid-cols-3 sm:grid-cols-1 mt-10">
+          <div class="sm:mr-20 sm:ml-20 mr-20 h-96 overflow-y-scroll">
+            <div v-for="(episode, index) in episodesByCharacter" :key="index">
+              <div class=" mb-5 p-5 shadow-lg hover:shadow-gray-500/50 rounded-lg cursor-pointer"
+                   :class="episode.id === selectedEpisode ? 'bg-gray-500' : 'bg-gray-700'"
+                   @click="getAllCharactersByEpisodes(episode)">
+                <p>{{ episode.name }}</p>
+                <p>{{ episode.episode }}</p>
+                <p>{{ episode.air_date }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-2 grow sm:mt-10 md:mt-0 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4 overflow-y-scroll h-96">
+            <div class="flex flex-col items-center"
+                 v-for="character in allCharactersByEpisode" :key="character.id">
+              <div class="h-16 w-16 rounded-full overflow-hidden">
+                <img :src="character.image" :alt="'Image de: ' + character.name">
+              </div>
+              <span class="text-base">{{ character.name }}</span>
+            </div>
+         </div>
+        </div>
+      </template>
+    </ModalComponent>
+  </section>
+</template>
+
+<script>
+import axios from "axios";
+import CardComponent from "../components/CardComponent.vue";
+import ModalComponent from "../components/ModalComponent.vue";
+
+export default {
+  name: "HomeView",
+  components: {CardComponent, ModalComponent},
+  data() {
+    return {
+      // datas
+      allCharacters: {},
+      detailsCharacter: {},
+      allCharactersByEpisode: [],
+      // modal
+      isOpenModal: false,
+      episodesByCharacter: {},
+      // style
+      selectedEpisode: null,
+      // pagination
+      pagination: {},
+    }
+  },
+  methods: {
+    getAllCharacters() {
+      axios.get("https://rickandmortyapi.com/api/character/?gender=female&species=human")
+        .then(({data}) => {
+          this.allCharacters = data.results;
+          this.pagination = data.infos;
+        })
+        .catch((error) => {
+          console.log(error);
+          window.alert("Une erreur est survenue... Merci d'essayer à nouveau");
+        });
+    },
+    getEpisodesCharacter(character) {
+      document.querySelector('body').style.overflow = "hidden";
+      this.isOpenModal = true;
+      this.detailsCharacter = character;
+      let episodesId = this.getItemsIdByURL(character.episode);
+
+      axios.get("https://rickandmortyapi.com/api/episode/" + episodesId)
+        .then(({data}) => {
+          this.episodesByCharacter = data;
+          this.getAllCharactersByEpisodes(data[0])
+        })
+        .catch((error) => {
+          console.log(error);
+          window.alert("Une erreur est survenue... Merci d'essayer à nouveau")
+        })
+    },
+    getItemsIdByURL(collection) {
+      let itemsId = [];
+      for (let i = 0; i < collection.length; i++) {
+        let urlSplit = collection[i].split('/');
+        itemsId.push(urlSplit[urlSplit.length - 1]);
+      }
+      return itemsId;
+    },
+    getAllCharactersByEpisodes(episode) {
+      this.selectedEpisode = episode.id;
+      let charactersId = this.getItemsIdByURL(episode.characters);
+      axios.get("https://rickandmortyapi.com/api/character/" + charactersId)
+        .then(({data}) => {
+          this.allCharactersByEpisode = data;
+        })
+        .catch(() =>{
+          window.alert("Une erreur est survenue... Merci d'essayer à nouveau")
+        })
+    },
+    closeModal() {
+      document.querySelector('body').style.overflow = "scroll";
+      this.detailsCharacter = {};
+      this.allCharactersByEpisode = {};
+      this.isOpenModal = false;
+    }
+  },
+  created() {
+    this.getAllCharacters()
+  }
+}
+</script>
