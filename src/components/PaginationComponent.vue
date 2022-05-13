@@ -6,7 +6,7 @@
       </li>
 
       <li class="cursor-pointer"
-          :class="n === pagination.currentPage ? 'text-red-600' : ''"
+          :class="n === currentPage ? 'text-red-600' : ''"
           v-for="(n, index) in pagination.pages" :key="index"
           @click="setNumberPage(n)">{{ n }}
       </li>
@@ -42,7 +42,6 @@ export default {
         this.currentPage = page;
         this.$emit('pageChange', this.currentPage)
       }
-
     }
   },
   created() {

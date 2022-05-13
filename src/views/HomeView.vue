@@ -122,10 +122,8 @@ export default {
     },
     // PAGINATION
     pageChange(value) {
-      console.log(value);
       axios.get("https://rickandmortyapi.com/api/character/?gender=female&species=human&page=" + value)
         .then(({data}) => {
-          console.log('daaata',data)
           this.allCharacters = data.results;
           this.pagination = data.info;
           this.pagination.currentPage = 1;
