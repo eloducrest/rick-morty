@@ -9,7 +9,7 @@ import FooterComponent from "@/components/FooterComponent.vue";
     <NavbarComponent></NavbarComponent>
   </header>
 
-  <main class="bg-gray-900">
+  <main class="bg-gray-900 pb-10">
     <RouterView />
   </main>
 

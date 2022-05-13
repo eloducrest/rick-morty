@@ -20,6 +20,20 @@
           <option :value="'dead'">Dead</option>
           <option :value="'unknown'">Unknown</option>
         </select>
+
+        <select class="h-8 ml-3" v-model="filters.species" @change="getAllCharacters">
+          <option :value="''">All species</option>
+          <option :value="'alien'">Alien</option>
+          <option :value="'animal'">Animal</option>
+          <option :value="'cronenberg'">Cronenberg</option>
+          <option :value="'disease'">Disease</option>
+          <option :value="'human'">Human</option>
+          <option :value="'humanoid'">Humanoid</option>
+          <option :value="'mythological'">Mythological Creature</option>
+          <option :value="'poopybutthole'">Poopybutthole</option>
+          <option :value="'robot'">Robot</option>
+          <option :value="'unknown'">Unknown</option>
+        </select>
       </div>
     </div>
     <div class="grid lg:grid-cols-3	md:grid-cols-2 sm:grid-cols-1 gap-4" v-if="haveNoResult === false">
@@ -86,6 +100,7 @@ export default {
         name: "",
         status: "",
         gender: "female",
+        species: "human",
       },
       haveNoResult: false,
       // modal
@@ -100,7 +115,7 @@ export default {
   methods: {
     // FETCH DATA
     getAllCharacters() {
-      axios.get("https://rickandmortyapi.com/api/character/?name="+this.filters.name+"&status="+this.filters.status+"&gender="+this.filters.gender)
+      axios.get("https://rickandmortyapi.com/api/character/?name="+this.filters.name+"&status="+this.filters.status+"&species="+this.filters.species+"&gender="+this.filters.gender)
         .then(({data}) => {
           this.allCharacters = data.results;
           this.pagination = data.info;
@@ -155,7 +170,7 @@ export default {
     },
     // PAGINATION
     pageChange(value) {
-      axios.get("https://rickandmortyapi.com/api/character/?name="+this.filters.name+"&status="+this.filters.status+"&gender="+this.filters.gender+ "&page="+value)
+      axios.get("https://rickandmortyapi.com/api/character/?name="+this.filters.name+"&status="+this.filters.status+"&gender="+this.filters.gender+"&species="+this.filters.species+"&page="+value)
         .then(({data}) => {
           this.allCharacters = data.results;
           this.pagination = data.info;
