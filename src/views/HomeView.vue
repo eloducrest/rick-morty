@@ -22,7 +22,7 @@
         </select>
       </div>
     </div>
-    <div class="grid lg:grid-cols-3	 md:grid-cols-2 sm:grid-cols-1 gap-4" v-if="haveNoResult === false">
+    <div class="grid lg:grid-cols-3	md:grid-cols-2 sm:grid-cols-1 gap-4" v-if="haveNoResult === false">
       <CardComponent class="cursor-pointer"
                      v-for="character in allCharacters" :key="character.id"
                      :character="character"
@@ -38,7 +38,7 @@
           }})</span></span>
       </template>
       <template v-slot:body>
-        <div class="grid grid-cols-3 sm:grid-cols-1 mt-10">
+        <div class="grid md:grid-cols-3 sm:grid-cols-1 mt-10">
           <div class="sm:mr-20 sm:ml-20 mr-20 h-96 overflow-y-scroll">
             <div v-for="(episode, index) in episodesByCharacter" :key="index">
               <div class=" mb-5 p-5 shadow-lg hover:shadow-gray-500/50 rounded-lg cursor-pointer"

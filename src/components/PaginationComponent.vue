@@ -38,7 +38,7 @@ export default {
       this.$emit('pageChange', this.currentPage);
     },
     setNumberPage(page) {
-      if (page !== this.pagination.currentPage) {
+      if (page !== this.currentPage) {
         this.currentPage = page;
         this.$emit('pageChange', this.currentPage)
       }
