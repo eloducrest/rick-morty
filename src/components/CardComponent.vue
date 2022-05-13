@@ -7,7 +7,7 @@
       <span class="text-gray-50 tex-2xl font-blod mb-2">{{ character.name }}</span>
       <div class="flex items-center mb-2">
         <div class="h-3 w-3 rounded-full mr-3"
-             :class="character.status === 'Alive' ? 'bg-green-600' : 'bg-red-600'"></div>
+             :class="character.status === 'Alive' ? 'bg-green-600' : character.status === 'Dead' ? 'bg-red-600' : 'bg-orange-600'"></div>
         <span>{{ character.status }}</span>
       </div>
       <div class="text-gray-500">

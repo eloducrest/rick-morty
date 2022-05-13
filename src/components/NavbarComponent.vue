@@ -13,7 +13,29 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "NavbarComponent"
+  name: "NavbarComponent",
+  data() {
+    return {
+      inputSearch: "",
+      timer: null,
+    }
+  },
+  methods: {
+    searchCharacters() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        axios.get("https://rickandmortyapi.com/api/character/?gender=female&species=human&name=" + this.inputSearch)
+          .then(({data}) => {
+            this.$emit("searchInput", data);
+          })
+          .catch(() => {
+            window.alert("Une erreur est survenue... Merci d'essayer à nouveau");
+          })
+      });
+    },
+  },
 }
 </script>
