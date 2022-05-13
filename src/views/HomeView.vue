@@ -125,6 +125,7 @@ export default {
     getAllCharacters() {
       axios.get("https://rickandmortyapi.com/api/character/?name="+this.filters.name+"&status="+this.filters.status+"&species="+this.filters.species+"&gender="+this.filters.gender)
         .then(({data}) => {
+          console.log('dadadada', data);
           this.allCharacters = data.results;
           this.pagination = data.info;
           this.pagination.currentPage = 1;
