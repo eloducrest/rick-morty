@@ -2,8 +2,7 @@
   <div class="flex items-start justify-center	fixed inset-0 bg-gray-900/75 pt-12"
        @click.stop.prevent="closeModal">
     <div class="bg-gray-800 text-white shadow-lg shadow-gray-800 min-h-200 w-[85%] max-h-[85%] overflow-y-auto rounded-lg relative p-8"
-         @click.stop
-         @keydown.esc="closeModal">
+         @click.stop>
       <div class="flex justify-between">
         <slot name="header"></slot>
         <span class="cursor-pointer text-2xl font-bold"
