@@ -1,10 +1,12 @@
 <template>
   <section class="container mx-auto">
-    <div class="container bg-gray-900 flex justify-center items-center px-4 mb-4 sm:px-6 lg:px-8 sticky top-0">
-      <input type="text" class="h-8 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none"
-             placeholder="Search character by name..."
-             v-model="filters.name"
-             @keyup="getAllCharacters">
+    <div class="container bg-gray-900 flex justify-center items-center sticky top-0 px-4 mb-4 sm:px-6 lg:px-8 sm:flex-col md:flex-row">
+      <div>
+        <input type="text" class="h-8 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none"
+               placeholder="Search character by name..."
+               v-model="filters.name"
+               @keyup="getAllCharacters">
+      </div>
       <div>
         <select class="h-8 ml-3" v-model="filters.gender" @change="getAllCharacters">
           <option :value="''">All gender</option>
@@ -13,14 +15,16 @@
           <option :value="'genderless'">Genderless</option>
           <option :value="'unknown'">Unknown</option>
         </select>
-
+      </div>
+      <div>
         <select class="h-8 ml-3" v-model="filters.status" @change="getAllCharacters">
           <option :value="''">All status</option>
           <option :value="'alive'">Alive</option>
           <option :value="'dead'">Dead</option>
           <option :value="'unknown'">Unknown</option>
         </select>
-
+      </div>
+      <div>
         <select class="h-8 ml-3" v-model="filters.species" @change="getAllCharacters">
           <option :value="''">All species</option>
           <option :value="'alien'">Alien</option>
