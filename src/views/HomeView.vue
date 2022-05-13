@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       // datas
-      dataToFetch: '?gender=female&species=human',
       allCharacters: {},
       detailsCharacter: {},
       allCharactersByEpisode: [],
