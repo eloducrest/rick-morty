@@ -1,42 +1,48 @@
 <template>
   <section class="container mx-auto">
-    <div class="container bg-gray-900 flex justify-center items-center sticky top-0 px-4 mb-4 sm:px-6 lg:px-8 sm:flex-col md:flex-row">
-      <div>
-        <input type="text" class="h-8 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none"
+    <div class="container bg-gray-900 flex justify-center items-center md:sticky top-0 px-4 mb-4 sm:px-6 lg:px-8 flex-col :flex-col md:flex-row md:py-4">
+      <div class="my-5 md:m-0 sm:w-full md:w-auto">
+        <input type="text" class="h-8 w-96 pr-8 pl-5 bg-transparent border border-slate-300 rounded-full text-xs z-0 focus:shadow text-white focus:outline-none"
                placeholder="Search character by name..."
                v-model="filters.name"
                @keyup="getAllCharacters">
       </div>
-      <div>
-        <select class="h-8 ml-3" v-model="filters.gender" @change="getAllCharacters">
-          <option :value="''">All gender</option>
-          <option :value="'female'">Female</option>
-          <option :value="'male'">Male</option>
-          <option :value="'genderless'">Genderless</option>
-          <option :value="'unknown'">Unknown</option>
+      <div class="mb-5 md:m-0 sm:w-full md:w-auto">
+        <select class="h-8 sm:ml-3 bg-transparent border border-slate-300 rounded-full text-xs text-white px-3"
+                v-model="filters.gender"
+                @change="getAllCharacters">
+          <option :value="''" class="text-black">All gender</option>
+          <option :value="'female'" class="text-black">Female</option>
+          <option :value="'male'" class="text-black">Male</option>
+          <option :value="'genderless'" class="text-black">Genderless</option>
+          <option :value="'unknown'" class="text-black">Unknown</option>
         </select>
       </div>
-      <div>
-        <select class="h-8 ml-3" v-model="filters.status" @change="getAllCharacters">
-          <option :value="''">All status</option>
-          <option :value="'alive'">Alive</option>
-          <option :value="'dead'">Dead</option>
-          <option :value="'unknown'">Unknown</option>
+      <div class="mb-5 md:m-0 sm:w-full md:w-auto">
+        <select class="h-8 sm:ml-3 bg-transparent border border-slate-300 rounded-full text-xs text-white px-3"
+                v-model="filters.status"
+                @change="getAllCharacters">
+          <option :value="''" class="text-black">All status</option>
+          <option :value="'alive'" class="text-black">Alive</option>
+          <option :value="'dead'" class="text-black">Dead</option>
+          <option :value="'unknown'" class="text-black">Unknown</option>
         </select>
       </div>
-      <div>
-        <select class="h-8 ml-3" v-model="filters.species" @change="getAllCharacters">
-          <option :value="''">All species</option>
-          <option :value="'alien'">Alien</option>
-          <option :value="'animal'">Animal</option>
-          <option :value="'cronenberg'">Cronenberg</option>
-          <option :value="'disease'">Disease</option>
-          <option :value="'human'">Human</option>
-          <option :value="'humanoid'">Humanoid</option>
-          <option :value="'mythological'">Mythological Creature</option>
-          <option :value="'poopybutthole'">Poopybutthole</option>
-          <option :value="'robot'">Robot</option>
-          <option :value="'unknown'">Unknown</option>
+      <div class="md:m-0 sm:w-full md:w-auto">
+        <select class="h-8 sm:ml-3 bg-transparent border border-slate-300 rounded-full text-xs text-white px-3"
+                v-model="filters.species"
+                @change="getAllCharacters">
+          <option :value="''" class="text-black">All species</option>
+          <option :value="'alien'" class="text-black">Alien</option>
+          <option :value="'animal'" class="text-black">Animal</option>
+          <option :value="'cronenberg'" class="text-black">Cronenberg</option>
+          <option :value="'disease'" class="text-black">Disease</option>
+          <option :value="'human'" class="text-black">Human</option>
+          <option :value="'humanoid'" class="text-black">Humanoid</option>
+          <option :value="'mythological'" class="text-black">Mythological Creature</option>
+          <option :value="'poopybutthole'" class="text-black">Poopybutthole</option>
+          <option :value="'robot'" class="text-black">Robot</option>
+          <option :value="'unknown'" class="text-black">Unknown</option>
         </select>
       </div>
     </div>
@@ -46,42 +52,39 @@
                      :character="character"
                      @click="getEpisodesByCharacter(character)"></CardComponent>
     </div>
-    <div v-else>Aucun résultat trouvé...</div>
-
+    <div class="flex justify-center text-white font-bold text-xl pt-10" v-else>Aucun résultat trouvé...</div>
 
     <ModalComponent v-if="isOpenModal" @closeModal="closeModal">
-      <template v-slot:header>
+        <template v-slot:header>
         <span class="text-2xl font-bold underline">Les épisodes de : {{ detailsCharacter.name }} <span class="text-lg">({{
             episodesByCharacter.length + ' apparition' + (episodesByCharacter.length > 1 ? 's' : '')
           }})</span></span>
-      </template>
-      <template v-slot:body>
-        <div class="grid md:grid-cols-3 sm:grid-cols-1 mt-10">
-          <div class="sm:mr-20 sm:ml-20 mr-20 h-96 overflow-y-scroll">
-            <div v-for="(episode, index) in episodesByCharacter" :key="index">
-              <div class=" mb-5 p-5 shadow-lg hover:shadow-gray-500/50 rounded-lg cursor-pointer"
-                   :class="episode.id === selectedEpisode ? 'bg-gray-500' : 'bg-gray-700'"
-                   @click="getAllCharactersByEpisodes(episode)">
-                <p>{{ episode.name }}</p>
-                <p>{{ episode.episode }}</p>
-                <p>{{ episode.air_date }}</p>
+        </template>
+        <template v-slot:body>
+          <div class="grid md:grid-cols-3 grid-cols-1 mt-10">
+            <div class="mx-10 md:mx-0  h-96 overflow-y-scroll">
+              <div v-for="(episode, index) in episodesByCharacter" :key="index">
+                <div class="mb-5 p-5 shadow-lg hover:shadow-gray-500/50 rounded-lg cursor-pointer"
+                     :class="episode.id === selectedEpisode ? 'bg-gray-500' : 'bg-gray-700'"
+                     @click="getAllCharactersByEpisodes(episode)">
+                  <p>{{ episode.name }}</p>
+                  <p>{{ episode.episode }}</p>
+                  <p>{{ episode.air_date }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-2 grow sm:mt-10 md:mt-0 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 gap-4 overflow-y-scroll h-96">
+              <div class="flex flex-col items-center"
+                   v-for="character in allCharactersByEpisode" :key="character.id">
+                <div class="h-10 w-10 md:h-16 md:w-16 rounded-full overflow-hidden">
+                  <img :src="character.image" :alt="'Image de: ' + character.name">
+                </div>
+                <span class="sm:text-sm md:text-base">{{ character.name }}</span>
               </div>
             </div>
           </div>
-          <div
-            class="col-span-2 grow sm:mt-10 md:mt-0 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4 overflow-y-scroll h-96">
-            <div class="flex flex-col items-center"
-                 v-for="character in allCharactersByEpisode" :key="character.id">
-              <div class="h-16 w-16 rounded-full overflow-hidden">
-                <img :src="character.image" :alt="'Image de: ' + character.name">
-              </div>
-              <span class="text-base">{{ character.name }}</span>
-            </div>
-          </div>
-        </div>
-      </template>
-    </ModalComponent>
-
+        </template>
+      </ModalComponent>
     <PaginationComponent v-if="pagination.pages > 1"
                          :pagination="pagination"
                          @pageChange="pageChange"></PaginationComponent>
@@ -114,6 +117,8 @@ export default {
       selectedEpisode: null,
       // pagination
       pagination: {},
+      // server status
+      //serverStatus: ''
     }
   },
   methods: {
@@ -184,10 +189,23 @@ export default {
         .catch(() => {
           window.alert("Une erreur est survenue... Merci d'essayer à nouveau");
         })
-    }
+    },
+    // check status server
+    /*checkStatusServer() {
+      axios.get("https://rickandmortyapi.com/api")
+        .then((response) => {console.log('response : ', response)})
+    }*/
   },
   created() {
-    this.getAllCharacters()
+    this.getAllCharacters();
+  },
+  mounted() {
+    document.body.addEventListener('keydown', e => {
+      if (e.keyCode === 27) {
+        this.closeModal();
+      }
+    });
+    //this.checkStatusServer();
   }
 }
 </script>
